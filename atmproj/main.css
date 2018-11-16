@@ -1,0 +1,38 @@
+
+.ctain{
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+}
+.left-slogan{
+	color: white;
+	font-size: 40px;
+	font-family: fantasy;
+	margin-top: 25px;
+	margin-left: 10px;
+}
+.con-login{
+
+	padding-top: 60px;
+	padding-bottom: 60px;
+	box-shadow: -7.5px 7.5px 4px -4px rgba(50,50,50,.5), 4.5px -3px 4px -4px rgba(50,50,50,.5);
+	z-index: 10;
+	position: absolute;
+}
+.dismiss-ctr{
+	margin-top: .2rem;
+	font-family: -apple-system,BlinkMacSystemFont,Sans-serif;
+	display: none;
+}
+.con-label{
+	position: relative;
+	left: 1%;
+}
+.small-tips{
+	margin-left: 4px;
+}
+.btn-login{
+	position: relative;
+	left: 50%;
+	transform: translateX(-50%);
+}

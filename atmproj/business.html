@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <link rel="stylesheet" href="./business.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <title>Business</title>
+  </head>
+  <body>
+    <div class="container-fluid ctain">
+
+      <div class="row row-cont">
+
+        <div class="col-2 left-ctain">
+          <a class="btn btn-outline-primary left-link" href="./main.html" role="button"><p class="left-text">EXIT</p></a>
+        </div>
+
+        <div class="col-8 m-ctain" style="background-color: white;">
+          
+          <h3 class="m-title">
+            Choose One Service
+          </h3>
+
+          <div class="main">
+
+            <div class="card card-fade">
+              <img class="card-img-top c-img-size" src="./images/save_money.jpg" alt="Card image cap">
+              <div class="card-body">
+                <h5 class="card-title">Save Money</h5>
+                <small class="card-text small-tips">You can only deposit at most ¥10000 at one time.</small>
+                <a href="#" class="btn btn-primary link-pos" id="tosave">Save</a>
+              </div>
+            </div>
+
+            <div class="card card-fade">
+              <img class="card-img-top c-img-size" src="./images/take_money.jpg" alt="Card image cap">
+              <div class="card-body">
+                <h5 class="card-title">Take Money</h5>
+                <small class="card-text small-tips">You can only withdraw at most ¥10000 at one time.</small>
+                <a href="#" class="btn btn-primary link-pos" id="totake">Take out</a>
+              </div>
+            </div>
+
+            <div class="card card-fade">
+              <img class="card-img-top c-img-size" src="./images/check.jpg" alt="Card image cap">
+              <div class="card-body">
+                <h5 class="card-title">Check Balance</h5>
+                <small class="card-text small-tips">Check the balance and private info from your account.</small>
+                <a href="#" class="btn btn-primary link-pos" id="tocheck">Check</a>
+              </div>
+            </div>
+
+          </div>
+          
+        </div>
+        <div class="col-2"></div>
+      </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+      var extra = window.location.search;
+      $('#tosave').attr("href","./save.html"+extra);
+      $('#totake').attr("href","./withdraw.html"+extra);
+      $('#tocheck').attr("href","./check.html"+extra);
+    </script>
+  </body>
+</html>

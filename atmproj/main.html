@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <link rel="stylesheet" href="./main.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    
+    <title>ATM Project</title>
+  </head>
+  <body>
+    <div class="container-fluid ctain">
+
+      <div class="row">
+
+        <div class="col-8" style="background-color: #007bff;">
+          <p class="left-slogan">Welcome to your private bank!</p>
+        </div>
+        <div class="col-3 con-login"> 
+          <form id="form_access">
+
+            <div class="form-group">
+              <label for="account_name" class="con-label">Account Name</label>
+              <input type="text" class="form-control" id="account_name" placeholder="Enter account" name="account" required>
+              
+              
+            </div>
+            <div class="form-group">
+              <label for="account_password" class="con-label">Password</label>
+              <input type="password" class="form-control" id="account_password" placeholder="Password" name="password" required>
+              <div class="alert alert-danger alert-dismissible fade show dismiss-ctr" role="alert">
+                <small>This account has been registered.</small>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <small id="emailHelp" class="form-text text-muted small-tips">
+                We'll create a new account for you without registration.</small>
+
+            </div>
+           
+            <button class="btn btn-primary btn-login">Login</button>
+          </form>
+
+        </div>
+        <div class="col" style="background-color: #007bff;"></div>
+
+      </div>
+
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="./cookie.js"></script>
+    <script type="text/javascript">
+      var forms = document.getElementById('form_access');
+      forms.onsubmit = function (ev){
+        ev.preventDefault();
+
+        var account_value = document.getElementById('account_name').value;
+        var password_value = document.getElementById('account_password').value;
+        var check = getCookie(account_value,account_value);
+        /*chrome不支持本地js添加cookie*/
+        if(!check){
+          setCookie(account_value, account_value, password_value);
+          //setCookie(account_value, 'money','0');
+
+          window.location.href = "./business.html?"+account_value;// 完成后页面跳转
+        }else{
+          if(check!=password_value){ //处理同名但密码不同的情况
+            $('.dismiss-ctr').show(); //不支持account同名的提示
+          }else{
+
+            window.location.href = "./business.html?"+account_value;// 完成后页面跳转
+          }
+        }
+
+      }; 
+    </script>
+  </body>
+</html>
