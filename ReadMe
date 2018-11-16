@@ -1,0 +1,118 @@
+Assignment:
+  做一个静态的bank ATM界面:
+    1.主要功能有登陆、存取款和查询余额;
+    2.因为需要储存的信息单元很小,所以借助浏览器cookies来记录虚拟user的信息(账户名、密码、余额);
+    3.限制每次存取款的额度不超过10000;
+    4.功能间形成一个有效闭环——自我理解是页面间的有效跳转;
+    5.为了简化登陆流程,用户名和密码在第一次输入时自动完成注册;
+  自加限制:   
+    6.不允许出现同名的账户.
+
+HTML&CSS:
+  布局:
+    1.基本上使用了bootstrap的组件，每个页面都采用了栅栏流式布局container-fluid，和一些好看的表单控件；
+    2.五个页面: 登陆(login)、功能选择(business)、存款、取款、查询余额；
+    3.business页面: 采用了bootstrap的卡片标签(bootstrap-card)，即样式为上半部分为image，下半部分text和button；
+    4.用户误操作处理: 比如同名账户名、超额度的存取款。采用警示框(bootstrap-alert)弹出效果来提示user；
+  难点:
+    1.bootstrap的组件的scss样式具有最高优先级，link的css不能修改组件的内置样式，比如关于color、margin、padding等；
+    2.基于bootstrap组件的局部封装性，所以基本上时间花在了给元素水平垂直居中的定位上，狠狠补了一节css定位复习课。
+      position: absolute/relative; top/left; transform: translateX/translateY; 在bootstrap布局中可以说是通用的定位策略。
+      2'值得一提的是，单用top/left而不用transform有时不能达到预期效果。
+        网上搜到解释是：left/top的百分比值与父元素的宽高有关。如父元素width不设置，left有效果；而父元素heifht不设置，top没有效果。
+    3.用阴影制作元素凸出效果：
+      box-shadow: Apx Bpx Cpx Dpx color;
+        A,B控制阴影偏移方向，A为水平方向，正右负左；B为垂直方向，正下负上。
+        C控制模糊距离，数值越大越模糊
+        D控制阴影尺寸，数值越大阴影厚度越大
+JS
+  login页面:
+    1.阻止表单默认提交的行为ev.preventDefault(); 这样页面跳转才能有效window.location.href = url;
+  cookie:
+    1.思路: 采取子cookie(KEY=key1=value1&key2=value2&...)的方法取代一般cookie(key=value),这样可实现密码和存款余额绑定在一个cookie内,
+      进而实现多用户切换登陆; 将操作cookie方法封装在一个js文件里，在每个需要操作cookie的页面进行引入
+    2.实现: 
+      setCookie: 新建与修改cookie，内部检查cookie是否已存在(getCookie()=null?)，不存在则调用setAllCookie()
+      
+          function setCookie(cname, subName, value){
+            /*为了简化，没有写path、dominan、expires等*/
+            /*如果cname存在则在原来位置修改，如不在则创建*/
+
+            var subCookies = this.getAllCookie(cname) || {};
+            subCookies[subName] = value;
+
+            this.setAllCookie(cname, subCookies);
+          }
+      setAllCookie: 该方法接受两个参数，第二个参数为想要添加/修改的子cookie.
+      
+          function setAllCookie(cname, subcookies){
+            var cookieText = cname + "=",
+              subcookieParts = new Array(),
+              subName;
+
+            for(subName in subcookies){
+              if(subName.length>0 && subcookies.hasOwnProperty(subName)){
+                subcookieParts.push(subName + "=" + subcookies[subName]);
+              }
+            }
+
+            if(subcookieParts.length>0){
+              cookieText += subcookieParts.join("&");
+
+            }
+
+            document.cookie = cookieText;
+
+          }
+      getCookie: 
+      getAllCookie: 
+      
+    3.难点:基于2的cookie实现，由于除登陆页面外，存取款和查询余额页面都需要account_name(即KEY)来操作cookie，但account_name仅仅在用户登陆
+      输入时出现，所以需要一种传输手段，使得account_name能共享于每个页面。因此这里涉及一个同域页面间的信息传递的概念.
+      
+      同域: 两页面URL的协议，端口号和host(document.domain)一样
+      
+      尝试1: 使用教程见https://www.jianshu.com/p/d149c41af31a
+            原理详见https://developer.mozilla.org/zh-CN/docs/Web/API/Window/postMessage
+      
+            使用postMessage，如果两页面满足一下两条件的一种,就可使用postMessage
+      
+              条件1: 页面1使用window.open()打开页面2;
+              条件2: 页面1有iframe，iframe地址为页面2;
+            
+            经考虑使用了条件2: 
+            
+              //页面1
+              var iframe = window.frames[0] // 关系2
+
+              iframe.postMessage('向页面2发的数据，即account_name', '*')
+
+              // 接收页面2发送的数据
+              window.addEventListener("message", function(event) {
+                event.data // 收到的页面2发送的数据
+              })
+
+              //页面2
+              window.addEventListener("message", function(event) {
+                event.data // 页面1发送的数据，account_name
+                event.source.postMessage('向页面1发的数据', '*')
+              }, false)
+
+            失败原因: event.data只存在于监听器的域内，不能复制给外部变量(全局变量都不行..);而把cookie方法写进监听器域也不生效。
+            
+      尝试2: js获取url传递参数account_name，给每一个切换页面的button中的href值后添加'?account_name'，每个页面可以通过以下两条代码即可实现
+            信息(注意: url传递信息不安全，所以不要用它传递不加密的重要信息，在此例只添加一个accunt_name)
+   
+              var extra = window.location.search;
+              cur_account = extra.substring(1);
+  
+            小改进: url的account_name如果是汉字的话，会被转换UTF-8码，所以在查询余额页面想要显示account_name，就要进行转码
+            
+            escape不编码字符有69个：*，+，-，.，/，@，_，0-9，a-z，A-Z
+
+            encodeURI不编码字符有82个：!，#，$，&，'，(，)，*，+，,，-，.，/，:，;，=，?，@，_，~，0-9，a-z，A-Z
+
+            encodeURIComponent不编码字符有71个：!， '，(，)，*，-，.，_，~，0-9，a-z，A-Z
+            
+            encodeURIComponent是对于中文、韩文等象形文字使用最多的编码方法，所以对应的解码方法为decodeURIComponent(account_name)
+            
